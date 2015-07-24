@@ -33,8 +33,8 @@ filtered_feature_names <- gsub("BodyBody", "Body", filtered_feature_names)
 filtered_feature_names <- tolower(filtered_feature_names)
 
 
-tidy_data <- tbl_df(filtered_data) %>%
-  group_by('subject', 'activity') %>%
-  summarise_each(funs(mean)) %>%
-  gather(measurement, mean, -activity, -subject)
-
+tidy = aggregate(data, by=list(activity = data$activity, subject=data$subject), mean)
+# Remove the subject and activity column, since a mean of those has no use
+tidy[,90] = NULL
+tidy[,89] = NULL
+write.table(tidy, "tidy.txt", sep="\t")
